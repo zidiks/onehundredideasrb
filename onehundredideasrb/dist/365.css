@@ -1,0 +1,315 @@
+@import url(https://fonts.googleapis.com/css2?family=DM+Sans&display=swap);
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+app {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+routeroutlet {
+    display: block;
+    height: calc(100% - 4rem);
+    width: 100%;
+    overflow: hidden;
+}
+
+.app-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1;
+    grid-template-columns: 8rem 1fr;
+}
+
+#logo {
+    height: 4rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #3eb75d;
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#grid-content {
+    position: relative;
+}
+
+nav {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #3eb75d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    overflow: hidden;
+}
+
+.nav-ico {
+    font-size: 3rem;
+    cursor: pointer;
+    margin: 1.5rem 0;
+    transition: .3s;
+    -webkit-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.nav-ico:hover {
+    transform: scale(0.9);
+}
+
+#logo span {
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+@keyframes ldio-l9rlr73yzt {
+    0% {
+        top: 96px;
+        left: 96px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 18px;
+        left: 18px;
+        width: 156px;
+        height: 156px;
+        opacity: 0;
+    }
+}
+
+.ldio-l9rlr73yzt div {
+    position: absolute;
+    border-width: 4px;
+    border-style: solid;
+    opacity: 1;
+    border-radius: 50%;
+    animation: ldio-l9rlr73yzt 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.ldio-l9rlr73yzt div:nth-child(1) {
+    border-color: #3eb75d
+}
+
+.ldio-l9rlr73yzt div:nth-child(2) {
+    border-color: #3eb75d;
+    animation-delay: -0.5s;
+}
+
+.loadingio-spinner-ripple-4zu8uev3kgk {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    background: none;
+}
+
+.ldio-l9rlr73yzt {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
+
+.ldio-l9rlr73yzt div {
+    box-sizing: content-box;
+}
+
+#voiceMode {
+    width: 100%;
+    height: calc(100% - 4rem);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#voice-animation {
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    transition: .4s;
+    top: 90vh;
+}
+
+#voice-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    color: #3eb75d;
+}
+
+#voice-info {
+    position: relative;
+    bottom: 7rem;
+    opacity: 0;
+    transition: .7s;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .app-grid {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: 1fr 4rem;
+        grid-template-columns: 1fr;
+    }
+    #grid-nav {
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+    #grid-content {
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    nav {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .nav-ico {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+}
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 4rem);
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+
+.autocomplete * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+#interfaceMode {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 200%;
+    height: 100%;
+    transition: .4s;
+}
+
+#sympt-stage {
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+
+#desease-stage {
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+
+#myInputBtn {
+    border: 1px solid transparent;
+    background-color: #3eb75d;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}
+
+#analysisBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+#myAnalysis {
+    border: 1px solid transparent;
+    background-color: #3eb75d;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type=text] {
+    background-color: #f1f1f1;
+    width: 100%;
+    color: black;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #f1f1f1;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+

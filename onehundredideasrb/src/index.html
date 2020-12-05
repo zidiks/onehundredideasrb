@@ -9,14 +9,29 @@
 </head>
 
 <body>
-    <div id="display" class="close-d">
-        <div id="voiceBox">
-            <i class="material-icons" style="margin: 0.2rem 0.5rem;">settings_voice</i><span id="voice-stream"></span>
+    <app>
+        <div class="app-grid">
+            <div id="grid-nav">
+                <nav>
+                    <z-link to="interfaceMode" id="interface-mode" class="material-icons nav-ico">mouse</z-link>
+                    <span id="voice-mode" class="material-icons nav-ico">mic_off</span>
+                    <z-link to="assistantMode" id="assistant-mode" class="material-icons nav-ico">bubble_chart</z-link>
+                </nav>
+            </div>
+            <div id="grid-content">
+                <div id="logo">PharmHelper</div>
+                <routeroutlet></routeroutlet>
+                <section id="voiceMode">
+                    <div id="voice-center">
+                        <img id="voice-animation" src="/assets/voice.svg">
+                        <span id="voice-info">активируйте помощник  <span class="material-icons">mic</span></span>
+                    </div>
+                </section>
+            </div>
         </div>
-        <div id="display-inner">
-            <iframe id="frame" src="https://www.rceth.by/NDfiles/instr/20_03_95_p.pdf" frameborder="0"></iframe>
-        </div>
-    </div>
+    </app>
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
 </body>
 
 </html>

@@ -1,51 +1,114 @@
-require('./style.css');
-
-const { list } = require('./list');
-
-var lock = false;
-
-console.log('Pharmacy Helper started');
-
-const display = document.getElementById('display-inner');
-const voiceStream = document.getElementById('voice-stream');
-
-const drugsList = [];
-list.forEach(el => {
-    drugsList.push(el.name);
-})
-
-const grammar = '#JSGF V1.0; grammar drugs; public <drug> = ' + drugsList.join(' | ') + ' ;';
-
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 window.SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
+require(['./main.css', './services/router']);
+const { htmlDOM, states } = require('./services/globalProps');
+
+const audioPlay = new Audio('/assets/start.wav');
+
+htmlDOM.voiceAnimation = document.getElementById('voice-animation');
+htmlDOM.voiceInfo = document.getElementById('voice-info');
+htmlDOM.voiceMode = document.getElementById('voiceMode');
+
+var checkTimer = undefined;
+
+const endVoice = () => {
+    //htmlDOM.voiceInfo.style.opacity = 1;
+    htmlDOM.voiceAnimation.style.top = '90vh';
+    states.voice = false;
+    states.checkOrder = [];
+    setTimeout(() => {
+        htmlDOM.voiceMode.style.display = 'none';
+    }, 200);
+}
+
+const voiceToggle = document.getElementById('voice-mode');
+voiceToggle.addEventListener('click', () => {
+    states.onTalk = !states.onTalk;
+    if (states.onTalk) {
+        voiceToggle.innerHTML = 'mic';
+        audioPlay.volume = 0;
+        audioPlay.play();
+        //htmlDOM.voiceInfo.innerHTML = 'скажите «Привет, Адель»';
+    } else {
+        voiceToggle.innerHTML = 'mic_off';
+        endVoice();
+        if (checkTimer) clearInterval(checkTimer);
+        //htmlDOM.voiceInfo.innerHTML = 'активируйте помощник  <span class="material-icons">mic</span>';
+    }
+})
+
+
 const recognition = new SpeechRecognition();
-var speechRecognitionList = new SpeechGrammarList();
-speechRecognitionList.addFromString(grammar, 1);
-recognition.grammars = speechRecognitionList;
+// var speechRecognitionList = new SpeechGrammarList();
+// speechRecognitionList.addFromString(grammar, 1);
+// recognition.grammars = speechRecognitionList;
 recognition.interimResults = true;
 recognition.lang = 'ru-Ru';
 
-recognition.addEventListener('result', e => {
-    const transcript = Array.from(e.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
-    voiceStream.innerHTML = transcript;
-    if (!lock) {
-        list.forEach(el => {
-            if (transcript.toLowerCase().includes(el.name)) {
-                document.getElementById('frame').src = el.src;
-                document.getElementById('frame').style.display = 'block';
-            }
-        })
-        lock = true;
+const voiceAnim = () => {
+    htmlDOM.voiceAnimation.style.transform = 'scale(1.7)';
+    setTimeout(() => {
+        htmlDOM.voiceAnimation.style.transform = 'scale(1)';
+    }, 500);
+}
+
+const startVoice = () => {
+    htmlDOM.voiceMode.style.display = 'flex';
+    setTimeout(() => {
+        audioPlay.volume = 1;
+        states.voice = true;
+        //htmlDOM.voiceInfo.style.opacity = 0;
+        htmlDOM.voiceAnimation.style.top = '0vh';
+        audioPlay.currentTime = 0;
         setTimeout(() => {
-            lock = false
-        }, 300);
+            audioPlay.play();
+        }, 100);
+        const order = states.checkOrder;
+        checkTimer = setInterval(() => {
+            order.push(states.checkCache);
+            console.log(order);
+            if (order.length > 3) {
+                if (order[order.length - 1] == order[order.length - 2] && order[order.length - 2] == order[order.length - 3]) {
+                    endVoice();
+                    clearInterval(checkTimer);
+                } else states.checkOrder = [];
+            }
+        }, 5000);
+    }, 100);
+}
+
+recognition.addEventListener('result', e => {
+    if (states.onTalk) {
+        voiceAnim();
+        const transcript = Array.from(e.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+        states.checkCache = transcript;
+        if (transcript.toLowerCase().includes('адель') && transcript.toLowerCase().includes('привет')) {
+            if (!states.voice) startVoice();
+        }
     }
+
+    // if (!lock) {
+    //     list.forEach(el => {
+    //         if (transcript.toLowerCase().includes(el.name)) {
+    //             document.getElementById('frame').src = el.src;
+    //             document.getElementById('frame').style.display = 'block';
+    //         }
+    //     })
+    //     lock = true;
+    //     setTimeout(() => {
+    //         lock = false
+    //     }, 300);
+    // }
 });
 
-recognition.start();
+setTimeout(() => {
+    recognition.start();
+}, 1000);
 
-recognition.addEventListener('end', recognition.start);
+recognition.onend = function() {
+    recognition.start();
+};
