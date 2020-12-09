@@ -1,17 +1,30 @@
 <section id="interfaceMode">
     <section id="sympt-stage">
         <div class="autocomplete">
-            <input id="myInput" type="text" name="myAlgorimt" placeholder="Симптомы">
+            <input id="myInput" type="text" name="myAlgorimt" placeholder="поиск симптомов">
             <button id="myInputBtn">Добавить</button>
         </div>
-        <div>
+        <div class="interfaceContent">
+            <div class="titile-clear">
+                <span class="title">Симптомы</span>
+                <button id="myClear">Очистить</button>
+            </div>
             <ul id="myResults"></ul>
         </div>
         <div id="analysisBox">
             <button id="myAnalysis">Анализировать</button>
         </div>
     </section>
-    <section id="#desease-stage">
-        <h1>desease</h1>
+    <section id="desease-stage">
+        <div class="header-desease"><button id="back" class="btn">Назад</button> <span style="margin-left:1rem;" class="title">Возможные заболевания</span></div>
+        <ul id="desease-results">
+
+        </ul>
+    </section>
+    <section id="drugs-stage">
+        <div class="header-desease"><button id="back-last" class="btn">Назад</button> <span style="margin-left:1rem;" class="title">Рекомендуемые ЛС</span></div>
+        <ul id="drugs-results">
+
+        </ul>
     </section>
 </section>

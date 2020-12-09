@@ -4,13 +4,20 @@ const { db } = require('../services/firebase');
 
 const OnInit = () => {
     const symptoms = [];
-    const addedSymptoms = [];
+    var addedSymptoms = [];
+    const deseases = [];
+    var deseasesResults = [];
+    var drugsResults = [];
 
     const addSymptom = document.getElementById('myInputBtn');
     const myInput = document.getElementById('myInput');
     const myResults = document.getElementById('myResults');
     const myAnalys = document.getElementById('myAnalysis');
     const interfaceMode = document.getElementById('interfaceMode');
+    const backBtn = document.getElementById('back');
+    const desResults = document.getElementById('desease-results');
+    const myClear = document.getElementById('myClear');
+    const backLastBtn = document.getElementById('back-last');
 
     db.collection("symptoms").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -21,9 +28,20 @@ const OnInit = () => {
 
     db.collection("desease").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, doc.data());
+            deseases.push(doc.data());
         });
     });
+
+
+
+    myClear.removeEventListener('click', clearSympt);
+    myClear.addEventListener('click', clearSympt);
+
+    backBtn.removeEventListener('click', backFunc);
+    backBtn.addEventListener('click', backFunc);
+
+    backLastBtn.removeEventListener('click', backLastFunc);
+    backLastBtn.addEventListener('click', backLastFunc);
 
     addSymptom.removeEventListener('click', adSymt);
     addSymptom.addEventListener('click', adSymt);
@@ -31,22 +49,83 @@ const OnInit = () => {
     myAnalys.removeEventListener('click', analysSymt);
     myAnalys.addEventListener('click', analysSymt);
 
+    function clearSympt() {
+        addedSymptoms = [];
+        myResults.innerHTML = '';
+    }
+
+    function backLastFunc() {
+        interfaceMode.style.transform = `translateX(-33.33%)`;
+    }
+
     function analysSymt() {
+        deseasesResults = [];
+        desResults.innerHTML = '';
         if (addedSymptoms.length > 0) {
-            console.log('analysed');
-            interfaceMode.style.transform = `translateX(-${interfaceMode.offsetWidth/2}px)`;
+            //console.log('analysed', deseases);
+            deseases.forEach((el, id) => {
+                let count = 0;
+                addedSymptoms.forEach((sympt, index) => {
+                    if (Object.keys(el.symptoms).map(s => s.trim()).includes(sympt)) count++;
+                });
+                //console.log(Object.keys(el.symptoms));
+                //console.log(count);
+                if ((count / addedSymptoms.length) > 0.49) deseasesResults.push({
+                    rate: Math.round(count / addedSymptoms.length * 100),
+                    description: el.discription,
+                    name: el.name,
+                    id: id
+                });
+            });
+            deseasesResults.sort((a, b) => { a.rate - b.rate });
+            if (deseasesResults.length > 0) {
+                deseasesResults.forEach(res => {
+                    let desRes = document.createElement('li');
+                    desRes.classList.add('des-li');
+                    desRes.innerHTML = `<span style="color:#3eb75d; font-weight: 600;">${res.name}:</span> ${res.description} ${addedSymptoms.length > 2 ? '(' + res.rate + '% совпадений)' : ''}`;
+                    desRes.addEventListener('click', () => {
+                        drugsResults = [];
+                        Object.keys(deseases[res.id].drugs).forEach(item => {
+                            let count = 0;
+                            addedSymptoms.forEach(sympt => {
+                                if (Object.keys(deseases[res.id].drugs[item].sympt).map(s => s.trim()).includes(sympt)) count++;
+                            });
+                            if (count > 0) drugsResults.push(item);
+                        });
+                        let dr = document.getElementById('drugs-results');
+                        dr.innerHTML = '';
+                        drugsResults.forEach(el => {
+                            let div = document.createElement('div');
+                            div.innerHTML = el;
+                            dr.appendChild(div);
+                        })
+                        interfaceMode.style.transform = `translateX(-66.66%)`;
+                    })
+                    desResults.appendChild(desRes);
+                });
+            } else {
+                desResults.innerHTML = 'совпадений не найдено'
+            }
+            console.log('Возможные заболевания', deseasesResults);
+            interfaceMode.style.transform = `translateX(-33.33%)`;
         }
 
     }
 
+    function backFunc() {
+        interfaceMode.style.transform = `translateX(0)`;
+    }
+
     function adSymt() {
-        if (symptoms.includes(myInput.value) && !addedSymptoms.includes(myInput)) {
+        if (symptoms.includes(myInput.value) && !addedSymptoms.includes(myInput.value)) {
             console.log(myInput.value);
             let addResult = document.createElement('li');
+            addResult.classList.add('sympt-li')
             addResult.innerHTML = myInput.value;
             myResults.appendChild(addResult);
             addedSymptoms.push(myInput.value);
             console.log(addedSymptoms);
+            myInput.value = '';
         }
     }
 
@@ -70,12 +149,14 @@ const OnInit = () => {
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item starts with the same letters as the text field value:*/
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (arr[i].toUpperCase().includes(val.toUpperCase())) {
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("DIV");
                     /*make the matching letters bold:*/
-                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                    b.innerHTML += arr[i].substr(val.length);
+                    let currPoint = arr[i].toUpperCase().indexOf(val.toUpperCase());
+                    b.innerHTML = arr[i].substr(0, currPoint);
+                    b.innerHTML += "<strong>" + arr[i].substr(currPoint, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(currPoint + val.length);
                     /*insert a input field that will hold the current array item's value:*/
                     b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                     /*execute a function when someone clicks on the item value (DIV element):*/

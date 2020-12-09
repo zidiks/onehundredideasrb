@@ -20,25 +20,95 @@ input {
     outline: none;
 }
 
+.sympt-li {
+    list-style-type: none;
+    border-left: 2px solid #3eb75d;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 0.4rem;
+    margin-top: 15px;
+}
+
+.des-li {
+    list-style-type: none;
+    border-left: 2px solid #3eb75d;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 0.4rem;
+    margin-top: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn {
+    border: 1px solid transparent;
+    background-color: #3eb75d;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}
+
+.titile-clear {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#myClear {
+    border: 1px solid transparent;
+    background-color: #FFBC29;
+    color: #fff;
+    padding: 5px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    margin-left: 1rem;
+}
+
+.title {
+    color: #3eb75d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+}
+
+.interfaceContent {
+    width: calc(100% - 4rem);
+    padding: 2rem 2rem;
+}
+
 #interfaceMode {
     display: flex;
     flex-direction: row;
     position: relative;
-    width: 200%;
+    width: 300%;
     height: 100%;
-    transition: .4s;
+    transition: .6s;
 }
 
 #sympt-stage {
-    width: 50%;
+    width: 33.33%;
     height: 100%;
     position: relative;
 }
 
 #desease-stage {
-    width: 50%;
-    height: 100%;
+    width: calc(33.33% - 4rem);
+    height: calc(100% - 2rem);
     position: relative;
+    padding: 1rem 2rem;
+}
+
+#drugs-stage {
+    width: calc(33.33% - 4rem);
+    height: calc(100% - 2rem);
+    position: relative;
+    padding: 1rem 2rem;
+}
+
+.header-desease {
+    display: flex;
+    width: 100%;
+    align-items: center;
 }
 
 #myInputBtn {
@@ -102,4 +172,20 @@ input[type=text] {
     /*when navigating through the items using the arrow keys:*/
     background-color: DodgerBlue !important;
     color: #ffffff;
+}
+
+#desease-drugs {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+#drugs-results div {
+    text-transform: uppercase;
 }

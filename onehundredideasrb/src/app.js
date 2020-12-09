@@ -44,6 +44,7 @@ const recognition = new SpeechRecognition();
 // speechRecognitionList.addFromString(grammar, 1);
 // recognition.grammars = speechRecognitionList;
 recognition.interimResults = true;
+recognition.continuous = true;
 recognition.lang = 'ru-Ru';
 
 const voiceAnim = () => {
