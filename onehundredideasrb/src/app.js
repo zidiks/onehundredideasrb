@@ -6,11 +6,30 @@ const { htmlDOM, states } = require('./services/globalProps');
 
 const audioPlay = new Audio('/assets/start.wav');
 
+const { list } = require('./services/list');
+
+var transcript;
+
+const drugsList = [];
+list.forEach(el => {
+    drugsList.push(el.name);
+});
+
+const grammar = '#JSGF V1.0; grammar drugs; public <drug> = ' + drugsList.join(' | ') + ' ;';
+
 htmlDOM.voiceAnimation = document.getElementById('voice-animation');
 htmlDOM.voiceInfo = document.getElementById('voice-info');
 htmlDOM.voiceMode = document.getElementById('voiceMode');
+htmlDOM.voiceiFrame = document.getElementById('voiceiFrame');
+htmlDOM.voiceModeResultsBack = document.getElementById('voiceModeResultsBack');
 
 var checkTimer = undefined;
+
+voiceModeResultsBack.addEventListener('click', () => {
+    document.getElementById('voiceModeResults').style.display = 'none';
+    states.showVoiceRes = false;
+    //states.lockVoiceRes = true;
+})
 
 const endVoice = () => {
     //htmlDOM.voiceInfo.style.opacity = 1;
@@ -40,11 +59,11 @@ voiceToggle.addEventListener('click', () => {
 
 
 const recognition = new SpeechRecognition();
-// var speechRecognitionList = new SpeechGrammarList();
-// speechRecognitionList.addFromString(grammar, 1);
-// recognition.grammars = speechRecognitionList;
+var speechRecognitionList = new SpeechGrammarList();
+speechRecognitionList.addFromString(grammar, 1);
+recognition.grammars = speechRecognitionList;
 recognition.interimResults = true;
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.lang = 'ru-Ru';
 
 const voiceAnim = () => {
@@ -82,13 +101,26 @@ const startVoice = () => {
 recognition.addEventListener('result', e => {
     if (states.onTalk) {
         voiceAnim();
-        const transcript = Array.from(e.results)
+        transcript = Array.from(e.results)
             .map(result => result[0])
             .map(result => result.transcript)
             .join('');
         states.checkCache = transcript;
-        if (transcript.toLowerCase().includes('адель') && transcript.toLowerCase().includes('привет')) {
+        if (transcript.toLowerCase().includes('аделия') && transcript.toLowerCase().includes('привет')) {
             if (!states.voice) startVoice();
+            //states.lockVoiceRes = false;
+        }
+        if (states.voice && transcript.toLowerCase().includes('найди')) {
+            list.forEach(el => {
+                if (transcript.toLowerCase().includes(el.name) && !states.showVoiceRes) {
+                    htmlDOM.voiceiFrame.src = el.src;
+                    document.getElementById('voiceModeResults').style.display = 'block';
+                    //console.log(el.name);
+                    states.showVoiceRes = true;
+                    //states.lockVoiceRes = true;
+                    console.log(transcript);
+                }
+            })
         }
     }
 
